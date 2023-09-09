@@ -1,0 +1,16 @@
+---
+
+- name: win_update module
+  hosts: all
+  become: false
+  gather_facts: true
+  tasks:
+    - name: Install all updates and reboot
+      win_updates:
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+          - UpdateRollups
+          - Updates
+        reboot: true
+        log_path: c:\temp\update.log
