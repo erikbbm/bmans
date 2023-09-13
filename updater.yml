@@ -1,6 +1,6 @@
 ---
 - name: Install all Windows updates
-  hosts: windows_host
+  hosts: all
   gather_facts: no
   tasks:
     - name: Check for available updates
