@@ -1,9 +1,9 @@
 ---
 
-- name: Reboot windows
+- name: Install all updates and reboot
   hosts: all
   become: false
-  gather_facts: false
+  gather_facts: true
   tasks:
     - name: Install all updates and reboot as many times as needed
       ansible.windows.win_updates:

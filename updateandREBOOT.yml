@@ -12,5 +12,6 @@
           - CriticalUpdates
           - UpdateRollups
           - Updates
+-       state: installed
         reboot: true
         log_path: c:\temp\update.log
