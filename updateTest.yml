@@ -1,0 +1,11 @@
+---
+
+- name: Reboot windows
+  hosts: all
+  become: false
+  gather_facts: false
+  tasks:
+    - name: Install all updates and reboot as many times as needed
+      ansible.windows.win_updates:
+      category_names: '*'
+      reboot: true
