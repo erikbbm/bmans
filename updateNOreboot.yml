@@ -12,8 +12,5 @@
           - CriticalUpdates
           - UpdateRollups
           - Updates
-
-        async: 0  # Run this task asynchronously
-        poll: 0   # Do not wait for the task to complete
         reboot: false
         log_path: c:\temp\update.log
