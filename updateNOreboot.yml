@@ -6,7 +6,7 @@
   gather_facts: true
   tasks:
     - name: Install all updates and don't reboot
-      win_updates:
+      ansible.windows.win_updates:
         category_names:
           - SecurityUpdates
           - CriticalUpdates
