@@ -23,3 +23,5 @@
         state: 'installed'
         reboot: yes
       when: update_result.updates | length > 0
+      async: 0  # Run this task asynchronously
+      poll: 0   # Do not wait for the task to complete
