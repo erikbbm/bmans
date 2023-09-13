@@ -1,11 +1,25 @@
 ---
-
-- name: win_update module
-  hosts: all
-  become: false
-  gather_facts: true
+- name: Install all Windows updates
+  hosts: windows_host
+  gather_facts: no
   tasks:
-    - name: Install all updates and reboot as many times as needed
-      ansible.windows.win_updates:
-      category_names: '*'
-      reboot: true
+    - name: Check for available updates
+      win_updates:
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+          - UpdateRollups
+          - Updates
+        state: 'installed'
+      register: update_result
+
+    - name: Install updates if available
+      win_updates:
+        category_names:
+          - SecurityUpdates
+          - CriticalUpdates
+          - UpdateRollups
+          - Updates
+        state: 'installed'
+        reboot: yes
+      when: update_result.updates | length > 0
