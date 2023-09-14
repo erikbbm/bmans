@@ -7,7 +7,5 @@
   tasks:
     - name: Reboot Windows Machine
       ansible.windows.win_reboot:
-        async: 0  # Run this task asynchronously
-        poll: 0   # Do not wait for the task to complete
 #        pre_reboot_delay: 5
 #        post_reboot_delay: 120
