@@ -4,6 +4,7 @@
   hosts: all
   become: false
   gather_facts: true
+  ignore_unreachable: true
   tasks:
     - name: Reboot Windows Machine
       ansible.windows.win_reboot:
