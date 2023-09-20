@@ -7,4 +7,5 @@
   tasks:
     - name: Windows Ping
       ansible.windows.win_ping:
-        ignore_errors: true
+      async: 0  # Run this task asynchronously
+      poll: 0   # Do not wait for the task to complete
