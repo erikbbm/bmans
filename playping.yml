@@ -2,9 +2,9 @@
 
 - name: Ping servers
   hosts: all
+  ignore_unreachable: true
   become: false
   gather_facts: false
   tasks:
     - name: Windows Ping
       ansible.windows.win_ping:
-      #
