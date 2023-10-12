@@ -8,7 +8,6 @@
   tasks:
     - name: Install all updates and don't reboot
       ansible.windows.win_updates:
-        ignore_errors: true
         category_names:
           - SecurityUpdates
           - CriticalUpdates
