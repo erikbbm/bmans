@@ -1,0 +1,13 @@
+---
+- name: Execute PowerShell Script
+  hosts: windows_servers  # Replace with the name of your Windows host group
+  tasks:
+  #  - name: Copy PowerShell Script
+  #    win_copy:
+  #      src: path/to/your/script.ps1
+  #      dest: C:\path\on\remote\script.ps1
+  #
+    - name: Execute PowerShell Script
+      win_shell: |
+        $scriptPath = "C:\scripts\updatefiles.ps1"
+        powershell -ExecutionPolicy Bypass -File $scriptPath
