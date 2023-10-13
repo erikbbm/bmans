@@ -1,6 +1,6 @@
 ---
 - name: Execute PowerShell Script
-  hosts: windows_servers  # Replace with the name of your Windows host group
+  hosts: '*'  # Replace with the name of your Windows host group
   tasks:
   #  - name: Copy PowerShell Script
   #    win_copy:
