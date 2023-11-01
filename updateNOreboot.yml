@@ -10,7 +10,6 @@
       ansible.windows.win_updates:
         reboot: false
         log_path: c:\temp\update.log
-        exclude_drivers: yes
         category_names:
           - "Definition Updates"
           - "Microsoft Defender Antivirus"
