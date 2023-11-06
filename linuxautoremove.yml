@@ -1,0 +1,6 @@
+- hosts: "*"
+  become: yes
+  tasks:
+    - name: AptAutoRemove
+      apt:
+       autoremove: true
