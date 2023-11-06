@@ -4,3 +4,4 @@
     - name: AptAutoRemove
       apt:
        autoremove: true
+       autoclean: true
