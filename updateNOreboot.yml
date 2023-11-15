@@ -13,3 +13,7 @@
         category_names:
           - "Definition Updates"
           - "Microsoft Defender Antivirus"
+          - SecurityUpdates
+          - CriticalUpdates
+          - UpdateRollups
+          - Updates
