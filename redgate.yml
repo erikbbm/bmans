@@ -1,0 +1,41 @@
+---
+- name: Download and store the latest EXE file
+  hosts: your_server
+  tasks:
+    - name: Ensure the target directory exists
+      ansible.builtin.file:
+        path: "\\"
+        state: directory
+
+    - name: Fetch the HTML content of the URL
+      ansible.builtin.uri:
+        url: "https://download.red-gate.com/checkforupdates/SQLMonitorWeb/"
+        return_content: yes
+      register: url_content
+
+    - name: Extract the latest EXE file name
+      ansible.builtin.regex_search:
+        regex: 'SQLMonitorWeb_(\d+\.\d+\.\d+\.\d+)\.exe'
+        string: "{{ url_content.content }}"
+      register: latest_version_match
+
+    - name: Download the latest EXE file
+      ansible.builtin.get_url:
+        url: "https://download.red-gate.com/checkforupdates/SQLMonitorWeb/SQLMonitorWeb_{{ latest_version_match.match.0 }}.exe"
+        dest: "/path/to/target_directory/SQLMonitorWeb_{{ latest_version_match.match.0 }}.exe"
+
+    - name: Verify the download by comparing SHA256 checksum
+      ansible.builtin.shell:
+        cmd: "sha256sum /path/to/target_directory/SQLMonitorWeb_{{ latest_version_match.match.0 }}.exe | cut -d ' ' -f1"
+      register: local_sha256
+
+    - name: Retrieve the remote SHA256 checksum
+      ansible.builtin.uri:
+        url: "https://download.red-gate.com/checkforupdates/SQLMonitorWeb/SQLMonitorWeb_{{ latest_version_match.match.0 }}.exe.sha256"
+        return_content: yes
+      register: remote_sha256
+
+    - name: Fail the playbook if the checksums don't match
+      ansible.builtin.fail:
+        msg: "Checksums do not match! Possible file corruption."
+      when: local_sha256.stdout != remote_sha256.content
