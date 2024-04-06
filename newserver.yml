@@ -62,6 +62,7 @@
         marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
       loop_control:
         loop_var: item
+      ignore_errors: yes  # Ignoring errors for now to troubleshoot the undefined variable issue
 
     - name: Set timezone to Europe/Stockholm
       timezone:
