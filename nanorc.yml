@@ -39,6 +39,10 @@
         - bind ^T cutrestoffile execute
         - bind ^L linter execute
         - bind ^E execute main
-      owner: root
-      group: root
-      mode: '0644'
+
+    - name: Set ownership of /etc/nanorc
+      file:
+        path: /etc/nanorc
+        owner: root
+        group: root
+        mode: '0644'
