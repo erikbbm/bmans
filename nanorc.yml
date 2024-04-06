@@ -39,7 +39,6 @@
         - bind ^T cutrestoffile execute
         - bind ^L linter execute
         - bind ^E execute main
-      create: yes
       owner: root
       group: root
       mode: '0644'
