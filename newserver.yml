@@ -1,0 +1,119 @@
+---
+- name: Configure Ubuntu Server
+  hosts: "*"
+  become: true
+  tasks:
+    - name: Set permissions for motd scripts
+      file:
+        path: "{{ item }}"
+        mode: 0644
+      loop:
+        - /etc/update-motd.d/10-help-text
+        - /etc/update-motd.d/88-esm-announce
+        - /etc/update-motd.d/50-landscape-sysinfo
+        - /etc/update-motd.d/00-header
+        - /etc/update-motd.d/50-motd-news
+        - /etc/update-motd.d/91-contract-ua-esm-status
+        - /etc/update-motd.d/97-overlayroot
+        - /etc/update-motd.d/85-fwupd
+        - /etc/update-motd.d/98-fsck-at-reboot
+        - /etc/update-motd.d/90-updates-available
+
+    - name: Comment out lines 3 to 6 in ubuntu-esm-apps.list
+      lineinfile:
+        path: /var/lib/ubuntu-advantage/apt-esm/etc/apt/sources.list.d/ubuntu-esm-apps.list
+        line: "{{ item }}"
+      with_items:
+        - "# line 3"
+        - "# line 4"
+        - "# line 5"
+        - "# line 6"
+      insertbefore: EOF
+      regexp: "^line\\s+(3|4|5|6)"
+      
+    - name: Add brandter to sudoers
+      lineinfile:
+        dest: /etc/sudoers
+        line: "brandter ALL=(ALL) NOPASSWD:ALL"
+        validate: 'visudo -cf %s'
+
+    - name: Install necessary packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - neofetch
+        - zabbix-agent
+        - qemu-guest-agent
+
+    - name: Configure Zabbix agent
+      blockinfile:
+        path: /etc/zabbix/zabbix_agentd.conf
+        block: |
+          PidFile=/run/zabbix/zabbix_agentd.pid
+          LogFile=/var/log/zabbix-agent/zabbix_agentd.log
+          LogFileSize=0
+          Server=172.25.25.5
+          ServerActive=172.25.25.5:10051
+          Include=/etc/zabbix/zabbix_agentd.d/*.conf
+        create: yes
+        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
+      loop_control:
+        loop_var: item
+
+    - name: Set timezone to Europe/Stockholm
+      timezone:
+        name: Europe/Stockholm
+
+    - name: Set locale for LC_TIME
+      command: localectl set-locale LC_TIME=en_GB.UTF-8
+
+    - name: Restart and enable zabbix-agent service
+      service:
+        name: zabbix-agent
+        state: restarted
+        enabled: yes
+
+    - name: Append custom nano keybindings to nanorc
+      lineinfile:
+        path: /etc/nanorc
+        line: "{{ item }}"
+        insertafter: EOF
+      loop:
+        - bind ^X cut main
+        - bind ^C copy main
+        - bind ^V paste all
+        - bind ^Q exit all
+        - bind ^S savefile main
+        - bind ^W writeout main
+        - bind ^O insert main
+        - set multibuffer
+        - bind ^H help all
+        - bind ^H exit help
+        - bind ^F whereis all
+        - bind ^G findnext all
+        - bind ^B wherewas all
+        - bind ^D findprevious all
+        - bind ^R replace main
+        - bind ^Z undo main
+        - bind ^Y redo main
+        - unbind ^K main
+        - unbind ^U all
+        - unbind ^N main
+        - unbind ^Y all
+        - unbind M-J main
+        - unbind M-T main
+        - bind ^A mark main
+        - bind ^P location main
+        - bind ^T gotoline main
+        - bind ^T gotodir browser
+        - bind ^T cutrestoffile execute
+        - bind ^L linter execute
+        - bind ^E execute main
+
+    - name: Set ownership of /etc/nanorc
+      file:
+        path: /etc/nanorc
+        owner: root
+        group: root
+        mode: '0644'
