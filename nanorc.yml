@@ -9,6 +9,8 @@
         line: "{{ item }}"
         insertafter: EOF
       loop:
+        - bind ^X cut main
+        - bind ^C copy main
         - bind ^V paste all
         - bind ^Q exit all
         - bind ^S savefile main
