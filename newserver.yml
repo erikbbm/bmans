@@ -18,6 +18,7 @@
         - /etc/update-motd.d/85-fwupd
         - /etc/update-motd.d/98-fsck-at-reboot
         - /etc/update-motd.d/90-updates-available
+      ignore_errors: yes
 
     - name: Comment out lines 3 to 6 in ubuntu-esm-apps.list
       lineinfile:
