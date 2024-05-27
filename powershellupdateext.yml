@@ -3,32 +3,23 @@
   hosts: all
   become: yes
   become_method: runas
-  become_user: BMSYSTEM.LOCAL\erikb
   tasks:
-    - name: Ensure C:\temp directory exists
-      win_file:
-        path: C:\temp
-        state: directory
-
     - name: Install NuGet provider if not present
       win_shell: |
-        $logfile = "C:\temp\powerupdate$(Get-Date -Format 'yyyyMMdd').log"
         if (-not (Get-PackageProvider -Name NuGet -Force -ErrorAction SilentlyContinue)) {
-          Install-PackageProvider -Name NuGet -Force -Scope CurrentUser | Out-File -FilePath $logfile -Append 2>&1
+          Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
         }
+      args:
+        executable: powershell.exe
 
     - name: Install PSWindowsUpdate module
       win_shell: |
-        $logfile = "C:\temp\powerupdate$(Get-Date -Format 'yyyyMMdd').log"
-        Install-Module -Name PSWindowsUpdate -Force -Scope CurrentUser | Out-File -FilePath $logfile -Append 2>&1
+        Install-Module -Name PSWindowsUpdate -Force -Scope CurrentUser
+      args:
+        executable: powershell.exe
 
     - name: Run Windows Update with elevated privileges
       win_shell: |
-        $logfile = "C:\temp\\powerupdate$(Get-Date -Format 'yyyyMMdd').log"
-        $command = {
-          param ($logfile)
-          Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot | Out-File -FilePath $logfile -Append 2>&1
-        }
-        Start-Process powershell -ArgumentList ('-Command', $command -logfile $logfile) -Verb RunAs
+        Start-Process powershell.exe -ArgumentList "Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot" -Verb RunAs
       args:
         executable: powershell.exe
