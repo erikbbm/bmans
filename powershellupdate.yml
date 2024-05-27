@@ -2,10 +2,17 @@
 - name: Install PSWindowsUpdate module and run Windows Update
   hosts: windows
   tasks:
+    - name: Ensure C:\temp directory exists
+      win_file:
+        path: C:\temp
+        state: directory
+
     - name: Install PSWindowsUpdate module
       win_shell: |
-        Install-Module -Name PSWindowsUpdate -Force
+        $logfile = "C:\temp\powerupdate$(Get-Date -Format 'yyyyMMdd').log"
+        Install-Module -Name PSWindowsUpdate -Force *>&1 | Out-File -FilePath $logfile -Append
 
     - name: Run Windows Update
       win_shell: |
-        Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot
+        $logfile = "C:\temp\powerupdate$(Get-Date -Format 'yyyyMMdd').log"
+        Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot *>&1 | Out-File -FilePath $logfile -Append
