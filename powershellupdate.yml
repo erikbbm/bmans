@@ -1,16 +1,23 @@
 ---
 - name: Install PSWindowsUpdate module and run Windows Update
-  hosts: all
+  hosts: windows
   tasks:
     - name: Ensure C:\temp directory exists
       win_file:
         path: C:\temp
         state: directory
 
+    - name: Install NuGet provider if not present
+      win_shell: |
+        $logfile = "C:\temp\powerupdate$(Get-Date -Format 'yyyyMMdd').log"
+        if (-not (Get-PackageProvider -Name NuGet -Force -ErrorAction SilentlyContinue)) {
+          Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
+        } *>&1 | Out-File -FilePath $logfile -Append
+
     - name: Install PSWindowsUpdate module
       win_shell: |
         $logfile = "C:\temp\powerupdate$(Get-Date -Format 'yyyyMMdd').log"
-        Install-Module -Name PSWindowsUpdate -Force *>&1 | Out-File -FilePath $logfile -Append
+        Install-Module -Name PSWindowsUpdate -Force -Scope CurrentUser *>&1 | Out-File -FilePath $logfile -Append
 
     - name: Run Windows Update
       win_shell: |
