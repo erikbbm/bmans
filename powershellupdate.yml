@@ -22,7 +22,13 @@
         $logfile = "C:\temp\powerupdate$(Get-Date -Format 'yyyyMMdd').log"
         Install-Module -Name PSWindowsUpdate -Force -Scope CurrentUser | Out-File -FilePath $logfile -Append 2>&1
 
-    - name: Run Windows Update
+    - name: Run Windows Update with elevated privileges
       win_shell: |
-        $logfile = "C:\temp\powerupdate$(Get-Date -Format 'yyyyMMdd').log"
-        Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot | Out-File -FilePath $logfile -Append 2>&1
+        $logfile = "C:\temp\\powerupdate$(Get-Date -Format 'yyyyMMdd').log"
+        $command = {
+          param ($logfile)
+          Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot | Out-File -FilePath $logfile -Append 2>&1
+        }
+        Start-Process powershell -ArgumentList ('-Command', $command -logfile $logfile) -Verb RunAs
+      args:
+        executable: powershell.exe
