@@ -1,6 +1,6 @@
 ---
 - name: Install PSWindowsUpdate module and run Windows Update
-  hosts: windows
+  hosts: *
   tasks:
     - name: Ensure C:\temp directory exists
       win_file:
