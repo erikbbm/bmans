@@ -11,8 +11,8 @@
       win_shell: |
         $logfile = "C:\temp\powerupdate$(Get-Date -Format 'yyyyMMdd').log"
         if (-not (Get-PackageProvider -Name NuGet -Force -ErrorAction SilentlyContinue)) {
-          Install-PackageProvider -Name NuGet -Force -Scope CurrentUser
-        } | Out-File -FilePath $logfile -Append 2>&1
+          Install-PackageProvider -Name NuGet -Force -Scope CurrentUser | Out-File -FilePath $logfile -Append 2>&1
+        }
 
     - name: Install PSWindowsUpdate module
       win_shell: |
