@@ -1,0 +1,14 @@
+---
+
+- name: win_update module
+  hosts: all
+  become: true
+  become_method: BMSYSTEM.LOCAL\erikb
+  gather_facts: true
+  ignore_unreachable: true
+  tasks:
+    - name: Install all updates and no reboot
+      ansible.windows.win_updates:
+        reboot: false
+        log_path: c:\temp\update.log
+        category_names: '*'
