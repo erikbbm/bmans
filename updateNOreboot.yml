@@ -2,18 +2,13 @@
 
 - name: win_update module
   hosts: all
-  become: false
+  become: true
+  become_method: BMSYSTEM.LOCAL\administrator
   gather_facts: true
   ignore_unreachable: true
   tasks:
-    - name: Install all updates and don't reboot
+    - name: Install all updates and no reboot
       ansible.windows.win_updates:
         reboot: false
         log_path: c:\temp\update.log
-        category_names:
-          - "Definition Updates"
-          - "Microsoft Defender Antivirus"
-          - SecurityUpdates
-          - CriticalUpdates
-          - UpdateRollups
-          - Updates
+        category_names: '*'
