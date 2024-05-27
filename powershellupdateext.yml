@@ -20,6 +20,6 @@
 
     - name: Run Windows Update with elevated privileges
       win_shell: |
-        Start-Process powershell.exe -ArgumentList "Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot" -Verb RunAs
+        Invoke-Command -ScriptBlock { Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot } -Credential (Get-Credential)
       args:
         executable: powershell.exe
