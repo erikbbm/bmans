@@ -1,0 +1,11 @@
+---
+- name: Install PSWindowsUpdate module and run Windows Update
+  hosts: windows
+  tasks:
+    - name: Install PSWindowsUpdate module
+      win_shell: |
+        Install-Module -Name PSWindowsUpdate -Force
+
+    - name: Run Windows Update
+      win_shell: |
+        Get-WindowsUpdate -AcceptAll -Install -IgnoreReboot
