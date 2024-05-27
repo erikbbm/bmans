@@ -1,6 +1,9 @@
 ---
 - name: Install PSWindowsUpdate module and run Windows Update
   hosts: all
+  become: yes
+  become_method: runas
+  become_user: Administrator
   tasks:
     - name: Ensure C:\temp directory exists
       win_file:
