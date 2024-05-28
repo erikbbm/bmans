@@ -3,7 +3,7 @@
 - name: win_update module
   hosts: all
   become: false
-    gather_facts: true
+  gather_facts: true
   ignore_unreachable: true
   tasks:
     - name: Ensure log directory exists
