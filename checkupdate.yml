@@ -7,8 +7,8 @@
   gather_facts: true
   ignore_unreachable: true
   tasks:
-    - name: Search for "Update Failed" in log file
-      win_shell: Select-String -Path 'C:\path\to\your\logfile.log' -Pattern 'Update Failed'
+    - name: Search for "failed" in log file
+      win_shell: Select-String -Path 'C:\temp\update.log' -Pattern 'Update Failed'
       register: grep_result
       ignore_errors: yes
 
