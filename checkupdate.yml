@@ -1,0 +1,18 @@
+---
+
+- name: win_update module
+  hosts: all
+  become: true
+  become_method: BMSYSTEM.LOCAL\administrator
+  gather_facts: true
+  ignore_unreachable: true
+  tasks:
+    - name: Search for "Update Failed" in log file
+      win_shell: Select-String -Path 'C:\path\to\your\logfile.log' -Pattern 'Update Failed'
+      register: grep_result
+      ignore_errors: yes
+
+    - name: Fail the playbook if "Update Failed" is found
+      fail:
+        msg: "The string 'Update Failed' was found in the log file."
+      when: grep_result.stdout != ''
