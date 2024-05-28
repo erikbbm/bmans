@@ -8,7 +8,7 @@
   ignore_unreachable: true
   tasks:
     - name: Search for "failed" in log file
-      win_shell: Select-String -Path 'C:\temp\update.log' -Pattern 'Update Failed'
+      win_shell: Select-String -Path 'C:\temp\update.log' -Pattern 'KB2267602'
       register: grep_result
       ignore_errors: yes
 
