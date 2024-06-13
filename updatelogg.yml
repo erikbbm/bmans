@@ -1,6 +1,11 @@
 ---
 - name: Execute PowerShell Script
-  hosts: '*'  # Replace with the name of your Windows host group
+  hosts: all
+  become: false
+  vars_files:
+    - /opt/credentials.yml
+  gather_facts: true
+  ignore_unreachable: true
   tasks:
   #  - name: Copy PowerShell Script
   #    win_copy:
